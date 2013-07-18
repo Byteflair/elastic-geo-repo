@@ -1,0 +1,21 @@
+{
+	"place": {
+		"properties": {
+			"id": { 
+				"type": "long"
+			},
+			"name": { 
+				"type": "string"
+			},
+			"type": { 
+				"type": "string"
+			},
+			"locality": { 
+				"type": "string"
+			},
+			"location": {
+				"type": "geo_point"
+			}
+		}
+	}
+}
