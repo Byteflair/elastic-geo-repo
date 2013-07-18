@@ -1,6 +1,5 @@
 package com.byteflair.elastic.geo.front.controller;
 
-import org.apache.camel.ProducerTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,12 +8,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.byteflair.elastic.geo.front.model.Place;
-import com.byteflair.elastic.geo.front.util.SequenceGenerator;
+import com.byteflair.elastic.geo.front.service.PlaceService;
 
 @Controller
 public class PlaceController {
 	@Autowired
-	ProducerTemplate webProducerTemplate;
+	PlaceService placeService;
+	
+	@RequestMapping(method = RequestMethod.GET)
+	public String home() {
+		return "home";
+	}
 	
 	@RequestMapping(value = "/create-place", method = RequestMethod.GET)
 	public String createPlace(Model model) {
@@ -25,11 +29,9 @@ public class PlaceController {
 	
 	@RequestMapping(value = "/create-place", method = RequestMethod.POST)
 	public String createPlace(Place place, RedirectAttributes redirectAttributes) {
-		place.setId(SequenceGenerator.next());
+		Place createdPlace = placeService.createPlace(place);
 		
-		webProducerTemplate.sendBody("direct:elastic.index.place", place);
-		
-		redirectAttributes.addFlashAttribute("createdPlace", place);
+		redirectAttributes.addFlashAttribute("createdPlace", createdPlace);
 		
 		return "redirect:/created-place";
 	}
@@ -37,5 +39,12 @@ public class PlaceController {
 	@RequestMapping(value = "/created-place", method = RequestMethod.GET)
 	public String createdPlace(Model model) {
 		return "placeCreated";
+	}
+	
+	@RequestMapping(value = "/load-places", method = RequestMethod.GET)
+	public String loadPlaces() {
+		placeService.loadPlaces();
+		
+		return "redirect:/";
 	}
 }

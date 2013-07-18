@@ -9,11 +9,9 @@
 	</head>
 	<body>
 		<div class="container-fluid">
-			<h1>Lugar <strong>${createdPlace.name}</strong> creado satisfactoriamente</h1>
-			
 			<div class="row-fluid">
-				<a href="create-place" class="btn">Crear otro lugar</a>
-				<a href="/" class="btn">Inicio</a>
+				<a href="create-place" class="btn">Crear lugar</a>
+				<a href="load-places" class="btn">Cargar lugares</a>
 			</div>
 		</div>
 	</body>
