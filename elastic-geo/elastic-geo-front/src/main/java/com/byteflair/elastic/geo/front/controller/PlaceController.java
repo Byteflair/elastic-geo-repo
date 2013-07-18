@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.byteflair.elastic.geo.front.model.Place;
@@ -46,5 +47,22 @@ public class PlaceController {
 		placeService.loadPlaces();
 		
 		return "redirect:/";
+	}
+	
+	@RequestMapping(value = "/places-geo-search", method = RequestMethod.GET)
+	public String placesGeoSearch() {
+		return "placesGeoSearch";
+	}
+	
+	@RequestMapping(value = "/places-geo-search/search", method = RequestMethod.GET)
+	public String placesGeoSearch(@RequestParam("type") String type, @RequestParam("lat") Double lat, @RequestParam("lng") Double lng, @RequestParam("radius") Double radius, RedirectAttributes redirectAttributes) {
+		redirectAttributes.addFlashAttribute("list", placeService.searchPlaces(type, lat, lng, radius));
+		
+		return "redirect:/places-geo-search/result";
+	}
+	
+	@RequestMapping(value = "/places-geo-search/result", method = RequestMethod.GET)
+	public String placesGeoResult() {
+		return "placesGeoResult";
 	}
 }

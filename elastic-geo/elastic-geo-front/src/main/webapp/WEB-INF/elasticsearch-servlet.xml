@@ -42,6 +42,16 @@
 			<camel:setHeader headerName="CamelHttpCharacterEncoding"><camel:constant>UTF-8</camel:constant></camel:setHeader>
 			<camel:to uri="http://localhost:9200/directory/_bulk" />
 		</camel:route>
+		<camel:route>
+			<camel:from uri="direct:elastic.search.place"/>
+			<camel:setHeader headerName="CamelHttpMethod"><camel:constant>POST</camel:constant></camel:setHeader>
+			<camel:setHeader headerName="CamelHttpCharacterEncoding"><camel:constant>UTF-8</camel:constant></camel:setHeader>
+			<camel:to uri="http://localhost:9200/directory/place/_search" />
+			<camel:convertBodyTo type="java.lang.String"/>
+			<camel:unmarshal>
+				<camel:custom ref="placeListJsonDataFormatDefinition"/>
+			</camel:unmarshal>
+		</camel:route>
 	</camel:camelContext>
 	
     <bean id="objectMapper" class="org.codehaus.jackson.map.ObjectMapper" />
@@ -51,6 +61,12 @@
 	</bean>
 	
 	<bean id="placeJsonDataFormat" class="com.byteflair.elastic.geo.front.i9n.PlaceJsonDataFormat"/>
+	
+	<bean id="placeListJsonDataFormatDefinition" class="org.apache.camel.model.DataFormatDefinition">
+		<constructor-arg ref="placeListJsonDataFormat" />
+	</bean>
+	
+	<bean id="placeListJsonDataFormat" class="com.byteflair.elastic.geo.front.i9n.PlaceListJsonDataFormat"/>
 	
 	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>

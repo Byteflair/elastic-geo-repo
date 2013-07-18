@@ -12,6 +12,8 @@ public class Place implements Serializable {
 	private String locality;
 	private BigDecimal lat;
 	private BigDecimal lng;
+	
+	private BigDecimal distance;
 
 	public Long getId() {
 		return id;
@@ -59,5 +61,13 @@ public class Place implements Serializable {
 
 	public void setLng(BigDecimal lng) {
 		this.lng = lng;
+	}
+
+	public BigDecimal getDistance() {
+		return distance;
+	}
+
+	public void setDistance(BigDecimal distance) {
+		this.distance = distance;
 	}
 }

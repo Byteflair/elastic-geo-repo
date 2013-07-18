@@ -12,6 +12,7 @@
 			<div class="row-fluid">
 				<a href="create-place" class="btn">Crear lugar</a>
 				<a href="load-places" class="btn">Cargar lugares</a>
+				<a href="places-geo-search" class="btn">Búsqueda geolocalizada</a>
 			</div>
 		</div>
 	</body>
