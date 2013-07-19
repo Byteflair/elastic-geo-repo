@@ -10,7 +10,6 @@ import org.apache.commons.lang.StringUtils;
 import org.elasticsearch.action.search.SearchRequestBuilder;
 import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.common.unit.DistanceUnit;
-import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.GeoDistanceFilterBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
@@ -117,8 +116,7 @@ public class PlaceService {
 		QueryBuilder query = null;
 		
 		if (StringUtils.isNotBlank(type)) {
-			query = QueryBuilders.boolQuery();
-			((BoolQueryBuilder)query).must(QueryBuilders.termQuery("type", type));
+			query = QueryBuilders.termQuery("type", type);
 		} else {
 			query = QueryBuilders.matchAllQuery();
 		}
