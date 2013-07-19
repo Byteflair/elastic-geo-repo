@@ -123,8 +123,13 @@ public class PlaceService {
 		
 		if (lat != null && lat != 0.0 && lng != null && lng != 0.0) {
 			GeoDistanceFilterBuilder filter = FilterBuilders.geoDistanceFilter("location");
-			filter.distance(radius, DistanceUnit.KILOMETERS);
 			filter.point(lat, lng);
+			
+			if (radius != null) {
+				filter.distance(radius, DistanceUnit.KILOMETERS);
+			} else {
+				filter.distance(5.0, DistanceUnit.KILOMETERS);
+			}
 			
 			return QueryBuilders.filteredQuery(query, filter);
 		} else {
