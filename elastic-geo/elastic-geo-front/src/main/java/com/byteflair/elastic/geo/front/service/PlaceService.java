@@ -1,6 +1,7 @@
 package com.byteflair.elastic.geo.front.service;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,9 @@ import org.elasticsearch.index.query.FilterBuilders;
 import org.elasticsearch.index.query.GeoDistanceFilterBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.facet.FacetBuilder;
+import org.elasticsearch.search.facet.FacetBuilders;
+import org.elasticsearch.search.facet.terms.TermsFacetBuilder;
 import org.elasticsearch.search.sort.GeoDistanceSortBuilder;
 import org.elasticsearch.search.sort.SortBuilder;
 import org.elasticsearch.search.sort.SortBuilders;
@@ -21,6 +25,7 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.byteflair.elastic.geo.front.model.ElasticsearchResult;
 import com.byteflair.elastic.geo.front.model.Place;
 import com.byteflair.elastic.geo.front.util.SequenceGenerator;
 
@@ -84,13 +89,13 @@ public class PlaceService {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Place> searchPlaces(String type, Double lat, Double lng, Double radius) {
-		List<Place> foundPlaces = (List<Place>)webProducerTemplate.requestBody("direct:elastic.search.place", buildQuery(type, lat, lng, radius, 0, 25, getSort(lat, lng)));
+	public ElasticsearchResult<Place> searchPlaces(String type, Double lat, Double lng, Double radius) {
+		ElasticsearchResult<Place> foundPlaces = (ElasticsearchResult<Place>)webProducerTemplate.requestBody("direct:elastic.search.place", buildQuery(type, lat, lng, radius, getFacets(), 0, 25, getSort(lat, lng)));
 		
 		return foundPlaces;
 	}
 	
-	private String buildQuery(String type, Double lat, Double lng, Double radius, int start, int rows, SortBuilder sort){
+	private String buildQuery(String type, Double lat, Double lng, Double radius, List<FacetBuilder> facets, int start, int rows, SortBuilder sort){
 		SearchRequestBuilder searchRequest = new SearchRequestBuilder(null).setSearchType(SearchType.DFS_QUERY_THEN_FETCH).setFrom(start).setSize(rows).setExplain(false);
 		
 		searchRequest.setQuery(getQuery(type, lat, lng, radius));
@@ -103,6 +108,12 @@ public class PlaceService {
 			scriptFieldParams.put("lng", lng);
 			
 			searchRequest.addScriptField("distance", "doc['location'].arcDistanceInKm(lat,lng)", scriptFieldParams);
+		}
+		
+		if (facets != null) {
+			for (FacetBuilder facet : facets) {
+				searchRequest.addFacet(facet);
+			}
 		}
 		
 		if (sort != null) {
@@ -135,6 +146,23 @@ public class PlaceService {
 		} else {
 			return query;
 		}
+	}
+	
+	private List<FacetBuilder> getFacets(){
+		List<FacetBuilder> facets = new ArrayList<FacetBuilder>();
+		
+		FacetBuilder facet = null;
+
+		facet = FacetBuilders.termsFacet("type");
+		((TermsFacetBuilder)facet).scriptField("_source['type']");
+		
+		facets.add(facet);
+		
+		facet = FacetBuilders.termsFacet("locality");
+		((TermsFacetBuilder)facet).scriptField("_source['locality']");
+		facets.add(facet);
+		
+		return facets;
 	}
 	
 	private SortBuilder getSort(Double lat, Double lng) {

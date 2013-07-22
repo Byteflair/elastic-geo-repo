@@ -13,6 +13,7 @@
 				<a href="create-place" class="btn">Crear lugar</a>
 				<a href="load-places" class="btn">Cargar lugares</a>
 				<a href="places-geo-search" class="btn">Búsqueda geolocalizada</a>
+				<a href="places-facet-search" class="btn">Facetas</a>
 			</div>
 		</div>
 	</body>

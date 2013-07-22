@@ -19,9 +19,9 @@
 			
 			<div class="row-fluid">
 				<c:choose>
-					<c:when test="${not empty list && list.size() > 0 }">
+					<c:when test="${not empty list.list && list.list.size() > 0 }">
 						<ul>
-						<c:forEach items="${list}" var="place">
+						<c:forEach items="${list.list}" var="place">
 							<li>${place.name} - [<fmt:formatNumber maxFractionDigits="2" value="${place.distance}" /> km]</li>
 						</c:forEach>
 						</ul>

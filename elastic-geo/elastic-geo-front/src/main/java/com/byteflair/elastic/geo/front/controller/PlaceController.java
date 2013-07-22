@@ -65,4 +65,11 @@ public class PlaceController {
 	public String placesGeoResult() {
 		return "placesGeoResult";
 	}
+	
+	@RequestMapping(value = "/places-facet-search", method = RequestMethod.GET)
+	public String placesFacetSearch(Model model) {
+		model.addAttribute("list", placeService.searchPlaces(null, null, null, null));
+		
+		return "placesFacetSearch";
+	}
 }
