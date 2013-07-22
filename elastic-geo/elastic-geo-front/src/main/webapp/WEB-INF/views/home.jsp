@@ -14,6 +14,7 @@
 				<a href="load-places" class="btn">Cargar lugares</a>
 				<a href="places-geo-search" class="btn">Búsqueda geolocalizada</a>
 				<a href="places-facet-search" class="btn">Facetas</a>
+				<a href="places-autocomplete" class="btn">Autocompletado</a>
 			</div>
 		</div>
 	</body>

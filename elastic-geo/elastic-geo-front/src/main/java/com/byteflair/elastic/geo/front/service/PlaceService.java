@@ -154,7 +154,7 @@ public class PlaceService {
 		FacetBuilder facet = null;
 
 		facet = FacetBuilders.termsFacet("type");
-		((TermsFacetBuilder)facet).scriptField("_source['type']");
+		((TermsFacetBuilder)facet).field("type");
 		
 		facets.add(facet);
 		

@@ -1,4 +1,27 @@
 {
-	"index" : {
+	"index": {
+		"analysis": {
+			"analyzer": {
+				"placeNameIndexAnalyzer" : {
+					"type": "custom",
+					"tokenizer": "whitespace",
+					"filter" : ["trim", "lowercase", "asciifolding", "spanish_stop", "left_ngram"]
+				}
+			},
+			"filter": {
+	            "left_ngram": {
+	                "type" : "edgeNGram",
+	                "side" : "front",
+	                "min_gram" : 3,
+	                "max_gram" : 12
+	            },
+	            "spanish_stop" : {
+					"type" : "stop",
+					"ignore_case" : true,
+					"enable_position_increments" : true,
+					"stopwords_path" : "es/analysis/spanish-stopwords.txt"
+				}
+	        }
+		}
 	}
 }

@@ -72,4 +72,9 @@ public class PlaceController {
 		
 		return "placesFacetSearch";
 	}
+	
+	@RequestMapping(value = "/places-autocomplete", method = RequestMethod.GET)
+	public String placesAutocomplete() {
+		return "placesAutocomplete";
+	}
 }

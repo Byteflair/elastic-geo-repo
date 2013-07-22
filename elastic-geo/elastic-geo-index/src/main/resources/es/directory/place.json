@@ -5,10 +5,15 @@
 				"type": "long"
 			},
 			"name": { 
-				"type": "string"
+				"type": "string",
+				"analyzer": "placeNameIndexAnalyzer",
+				"content": {
+					"term_vector": "with_positions_offsets"
+				}
 			},
 			"type": { 
-				"type": "string"
+				"type": "string",
+				"index": "not_analyzed"
 			},
 			"locality": { 
 				"type": "string"
